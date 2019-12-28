@@ -1,7 +1,7 @@
-title: dancsi's github page
-description: 
-google_analytics: 
-show_downloads: true
+title: Dániel Szilágyi (Daniel Silađi)
+description: Computer Science PhD student at IRIF, Université de Paris
+google_analytics: UA-155091187-1
+show_downloads: false
 theme: jekyll-theme-minimal
 
 gems:
