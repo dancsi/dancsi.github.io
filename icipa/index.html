@@ -1,52 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Coiled Coil interaction scoring</title>
-    <script src="script.js"></script>
-  </head>
-  <body>
-    <div>
-      <label for="seq1">Sequence 1</label>
-      <input type="text" id="seq1" value="DEIQALEEENAQLEQENAALEEEIAQLEYG">
-    </div>
 
-    <div>
-      <label for="seq1">Sequence 2</label>
-      <input type="text" id="seq2" value="DKIAQLKEKNAALKEKNQQLKEKIQALKYG">
-    </div>
+<head>
+  <meta charset="utf-8">
+  <title>iCipa Coiled Coil interaction scoring</title>
+  <script src="coi-serviceworker.js"></script>
+  <script src="wrapper.js"></script>
+  <script src="ui.js"></script>
+  <script src="fastscore.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-    <div>
-      <label for="align">Alignment</label>
-      <input type="number" id="align" step=7 value=0 min=0>
-      <label for="align">(largest shift to scan (in residues) )</label>
-    </div>
+<body>
+  <h1>iCipa scoring function</h1>
+  <p>Sequences should start with the f register or be padded using a -.</p>
 
-    <div>
-      <label for="truncate">Truncate</label>
-      <input type="checkbox" id="truncate" checked>
-    </div>
+  <p><b>When using this server please cite Boldrige, Ljubetic et al., <br><a
+        href="https://www.biorxiv.org/content/10.1101/2020.11.12.377184v1">
+        A Multiplexed Bacterial Two-Hybrid for Rapid Characterization of Protein-Protein Interactions and Iterative
+        Protein Design | bioRxiv
+      </a></b></p>
 
-    <div id="orientationChooser">
-      <p>Orientation</p>
-      <input type="radio" id="parallel" name="orientation" checked> <label for="parallel">Parallel</label>
-      <input type="radio" id="antiparallel" name="orientation"> <label for="antiparallel">Antiparallel</label>
-      <input type="radio" id="both" name="orientation"> <label for="both">Both</label>
-    </div>
+  <div>
+    <h2>Choose a file</h2>
+    <input type="file" id="filepicker" />
+  </div>
 
-    <div id="scoringEngineChooser">
-      <p>Function</p>
-      <input type="radio" id="icipa_core_vert" name="scoringEngine" checked> <label for="icipa_core_vert">icipa_core_vert</label>
-      <input type="radio" id="icipa_nter_core" name="scoringEngine"> <label for="icipa_nter_core">icipa_nter_core</label>
-      <input type="radio" id="bcipa" name="scoringEngine"> <label for="bcipa">bcipa</label>
-      <input type="radio" id="potapov" name="scoringEngine"> <label for="potapov">Potapov</label>
-    </div>
 
-    <div id="res">
-      <p>Score: <span id="resScore"></span></p>
-      <p>Alignment: <span id="resAlignment"></span></p>
-      <p>Orientation: <span id="resOrientation"></span></p>
+  <div>
+    <label for="align"><h2>Alignment</h2></label>
+    <input type="number" id="align" step=1 value=0 min=0>
+    <label for="align">largest shift to scan (in heptads). Will scan ± number of heptads. </label>
+  </div>
+
+  <div>
+    <label for="truncate">Truncate</label>
+    <input type="checkbox" id="truncate" checked>
+  </div>
+
+  <div id="orientationChooser">
+    <h2>Orientation</h2>
+    <input type="radio" id="parallel" name="orientation" value="Parallel" checked> <label
+      for="parallel">Parallel</label>
+    <input type="radio" id="antiparallel" name="orientation" value="Antiparallel"> <label
+      for="antiparallel">Antiparallel</label>
+    <input type="radio" id="both" name="orientation" value="Both"> <label for="both">Both</label>
+  </div>
+
+  <div id="scoringEngineChooser">
+    <h2>Scoring function</h2>
+    <input type="radio" id="icipa_nter_core" name="scoringEngine" value="iCIPA_nter_core" checked> <label
+      for="icipa_nter_core">iCipa (icipa_nter_core)</label>
+    <input type="radio" id="icipa_core_vert" name="scoringEngine" value="iCIPA_core_vert" checked> <label
+      for="icipa_core_vert">iCipa variant (core_vert)</label>
+    <input type="radio" id="bcipa" name="scoringEngine" value="bCIPA"> <label for="bcipa"><a
+        href="http://www.syntbio.net/bCIPA/index_PNAS_version.php">bCipa</a> </label>
+    <input type="radio" id="potapov" name="scoringEngine" value="Potapov"> <label for="potapov"><a
+        href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004046">Potapov et al</a></label>
+  </div>
+
+  <div id="outputFormatChooser">
+    <h2>Output format</h2>
+    <input type="radio" id="binary" name="outputFormat" value="Binary" checked> <label
+      for="binary">Binary (.bin, .align.bin and .orientation.bin)</label>
+    <input type="radio" id="csv" name="outputFormat" value="CSV"> <label
+      for="csv">CSV</label>
+  </div>
+
+  <div>
+    <h2>Run fastscore</h2>
+    <input type="button" id="run" value="Run">
+  </div>
+
+  <div style="display:none" id="fastscore-cmdline-container">
+    <h3>Command line arguments</h3>
+    <p id="fastscore-cmdline"></p>
+  </div>
+
+  <div>
+    <h2>Generated files</h2>
+    <div id="downloadarea">
     </div>
-    
-  </body>
+  </div>
+</body>
+
 </html>
